@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wydatki - Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h2>Wydatki</h2>
+    <a href="{{ url_for('add') }}">Dodaj nowy wydatek/przychód</a>
+
+    <div id="filters" style="margin-bottom: 1em;"></div>
+    <div id="pivot-expense-section"></div>
+
+
+
+</body>
+
+</html>
