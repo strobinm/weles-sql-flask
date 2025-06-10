@@ -1,21 +1,73 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="PL">
 
 <head>
     <meta charset="UTF-8">
-    <title>Wydatki - Flask</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Transactions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Wydatki</h2>
-    <a href="{{ url_for('add') }}">Dodaj nowy wydatek/przychód</a>
+    <h1>All Transactions</h1>
+    <table id="transactionsTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Shop</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-    <div id="filters" style="margin-bottom: 1em;"></div>
-    <div id="pivot-expense-section"></div>
-
-
-
+    <script>
+        fetch("/api/transactions")
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.querySelector("#transactionsTable tbody");
+                data.forEach(tx => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+            <td>${tx.date}</td>
+            <td>${tx.type}</td>
+            <td>${tx.name}</td>
+            <td>${tx.quantity}</td>
+            <td>${tx.price}</td>
+            <td>${tx.amount}</td>
+            <td>${tx.shop || '-'}</td>
+            <td>${tx.category}</td>
+            <td>${tx.subcategory}</td>
+          `;
+                    tbody.appendChild(row);
+                });
+            });
+    </script>
 </body>
 
 </html>

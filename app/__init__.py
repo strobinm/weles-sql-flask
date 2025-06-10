@@ -1,8 +1,10 @@
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, url_for, redirect
+from app.extensions import db
 from app.config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
+from app.routes import routes
+# No longer need extract, distinct here as they are used in filters.py
+# from sqlalchemy import extract, distinct
 
-db = SQLAlchemy()
 
 
 def create_app():
@@ -12,9 +14,17 @@ def create_app():
 
     db.init_app(app)
 
+    # Import models and filters after db is initialized to avoid circular imports
+    from app.models import IncomeExpense, Shop, Category, Subcategory, Transaction
+    # Register the blueprint
+    app.register_blueprint(routes)
+
     @app.route('/')
     def home():
-        return render_template('index.html')
+        # Pass data to the template
+        return render_template(
+            'index.html'
+            )
 
     @app.route('/about')
     def about():
